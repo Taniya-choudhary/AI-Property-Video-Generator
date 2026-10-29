@@ -1,1 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Property Video Studio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="hero">
+  <div class="eyebrow">PROPERTY MARKETING STUDIO</div>
+  <h1>Turn property photos into a <span>video advertisement.</span></h1>
+  <p>Cinematic photo motion, smooth fade transitions, on-screen property details, continuous narration and downloadable vertical MP4.</p>
+  <div class="pills"><span>AI photo analysis</span><span>Voice-over included</span><span>Animated text overlays</span><span>Vertical MP4</span></div>
+</header>
+<main>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}{% for category, message in messages %}
+    <div class="alert {{ category }}">{{ message }}</div>
+  {% endfor %}{% endif %}
+{% endwith %}
 
+{% if video_url %}
+<section class="result">
+  <h2>Your property advertisement is ready</h2>
+  <video controls playsinline src="{{ video_url }}"></video>
+  <a class="button" href="{{ download_url }}">Download MP4</a>
+  <p class="hint">Play the video with sound enabled to hear the narration.</p>
+</section>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  <section class="panel">
+    <div class="section-top"><div><small>STEP 01</small><h2>Property information</h2></div><span class="required">Required fields *</span></div>
+    <div class="grid">
+      <label>Property name *<input name="property_name" required placeholder="e.g. Sunshine Residency"></label>
+      <label>Location *<input name="location" required placeholder="e.g. Mohali, Punjab"></label>
+      <label>Asking price *<input name="price" required placeholder="e.g. ₹75 lakh"></label>
+      <label>Property type *<select name="property_type" required><option value="">Select type</option><option>Apartment</option><option>Independent House</option><option>Villa</option><option>Builder Floor</option><option>Plot</option><option>Commercial Property</option><option>Other</option></select></label>
+      <label>Bedrooms<input name="bedrooms" placeholder="e.g. 3"></label>
+      <label>Bathrooms<input name="bathrooms" placeholder="e.g. 2 (mention attached in highlights)"></label>
+      <label>Area / size<input name="area" placeholder="e.g. 1800 sq. ft."></label>
+      <label class="wide">Key selling points<textarea name="highlights" rows="3" placeholder="e.g. 2 attached bathrooms, modular kitchen, parking, 24/7 security, natural lighting"></textarea><small>Only enter verified features. Features are narrated alongside the matching room photo. Add details like attached bathrooms here if applicable.</small></label>
+      <label class="wide">Contact / call to action *<input name="contact" required placeholder="Phone number or enquiry contact"></label>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="section-top"><div><small>STEP 02</small><h2>Upload property photos</h2></div><span class="required">4–8 images *</span></div>
+    <label class="upload">
+      <input type="file" name="photos" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple required>
+      <strong>Choose photos from your computer</strong>
+      <span>Hold Ctrl to select multiple photos. JPG, PNG or WEBP, 4–8 images.</span>
+    </label>
+    <label class="wide">Photo labels in upload order (recommended)
+      <input name="photo_labels" placeholder="e.g. Balcony, Exterior, Kitchen, Bedroom">
+      <small>Enter one label per photo, separated by commas, in the same order you selected the photos. Supported labels: Balcony, Exterior, Kitchen, Bedroom, Living Room, Bathroom, Dining Area, Garden, Parking. This prevents the AI from calling a balcony a kitchen.</small>
+    </label>
+    <p class="hint">Recommended: add labels in the exact upload order. The video uses gentle zoom, fade transitions, room-title overlays, opening property details and a final contact/site-visit card.</p>
+  </section>
+  <button class="button submit" type="submit">Generate AI property advertisement <span>→</span></button>
+</form>
+<footer>AI-generated descriptions can be imperfect. Review the final video and verify every property claim before publishing.</footer>
+</main>
+</body>
+</html>
